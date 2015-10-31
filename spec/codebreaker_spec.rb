@@ -5,7 +5,27 @@ describe Codebreaker do
     expect(Codebreaker::VERSION).not_to be nil
   end
 
-  it 'does something useful' do
-    expect(false).to eq(true)
+  describe '#start' do
+
+  end
+
+  describe '#guess' do
+
+  end
+
+  describe '#hint' do
+
+  end
+
+  describe '#win' do
+
+  end
+
+  describe '#lose' do
+
+  end
+
+  describe '#save_score' do
+
   end
 end
