@@ -119,7 +119,9 @@ describe Codebreaker::Game do
         expect(unique_hints.uniq).to contain_exactly(*unique_hints)
       end
 
-      it 'increments number of hints'
+      it 'increments number of hints' do
+        expect{session.hint}.to change{session.hints}.by(1)
+      end
 
       context 'when reveals last element' do
         it 'wins a game'
