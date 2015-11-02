@@ -86,9 +86,7 @@ describe Codebreaker::Game do
           context 'and guess 1324' do
             let(:code) { [1,3,2,4] }
 
-            it 'wins a game' do
-              expect(session.guess(code)).to_not be_an(Array) # => WRONG
-            end
+            it 'wins a game' # idea
           end
         end
       end
@@ -106,7 +104,19 @@ describe Codebreaker::Game do
     end
 
     describe '#hint' do
+      it 'reveals one element of code' do
+        expect(session.hint.map.with_index{ |v, i| [v,session.answer[i]] }.any? do |x|
+          x[0] == x[1]
+        end).to be_truthy
+      end
 
+      it 'is unique'
+
+      it 'increments number of hints'
+
+      context 'when reveals last element' do
+        it 'wins a game'
+      end
     end
 
     describe '#win' do
