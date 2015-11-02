@@ -104,13 +104,20 @@ describe Codebreaker::Game do
     end
 
     describe '#hint' do
+      before do
+        session.start
+      end
+      let(:unique_hints) { [session.hint, session.hint, session.hint, session.hint] }
+
       it 'reveals one element of code' do
         expect(session.hint.map.with_index{ |v, i| [v,session.answer[i]] }.any? do |x|
           x[0] == x[1]
         end).to be_truthy
       end
 
-      it 'is unique'
+      it 'is unique' do
+        expect(unique_hints.uniq).to contain_exactly(*unique_hints)
+      end
 
       it 'increments number of hints'
 

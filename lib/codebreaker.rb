@@ -10,6 +10,7 @@ module Codebreaker
     def start
       @attempts = 10
       @answer = generate_code(4)
+      @elements_revealed = []
     end
 
     def guess(code)
@@ -36,6 +37,18 @@ module Codebreaker
 
     def lose
       "You lost :(\nTry again later."
+    end
+
+    def hint
+      random_code_element = 0
+      loop do
+        random_code_element = rand(@answer.size)
+        break unless @elements_revealed.include? random_code_element
+      end
+      @elements_revealed << random_code_element
+      hint = (['*']*@answer.size)
+      hint[random_code_element] = @answer[random_code_element]
+      hint
     end
 
     def save_score(name)
