@@ -2,7 +2,7 @@ require "codebreaker/version"
 
 module Codebreaker
   class Game
-    attr_accessor :attempts, :answer
+    attr_accessor :attempts, :answer, :hints
     def initialize
       # Nothing here..
     end
@@ -10,6 +10,7 @@ module Codebreaker
     def start
       @attempts = 10
       @answer = generate_code(4)
+      @hints = 0
       @elements_revealed = []
     end
 
@@ -30,7 +31,7 @@ module Codebreaker
     end
 
     def win
-      @score = (10 - @attempts) * 4 * 6
+      @score = (10 - @attempts) * 4 * 6 - @hints*20
       "You won! The code was #{@answer}.\nIt took you #{10 - @attempts} attempts.\nYou'r score is #{@score}.\nWrite you'r name:"
       save_score(gets.chomp)
     end
@@ -46,6 +47,7 @@ module Codebreaker
         break unless @elements_revealed.include? random_code_element
       end
       @elements_revealed << random_code_element
+      @hints += 1
       hint = (['*']*@answer.size)
       hint[random_code_element] = @answer[random_code_element]
       hint
