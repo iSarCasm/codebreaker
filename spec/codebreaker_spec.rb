@@ -18,19 +18,19 @@ describe Codebreaker::Game do
       it 'generates new code' do
         expect{ session.start }.to change{ session.answer }
       end
+
+      it 'changes state to :in_process' do
+        expect{ session.start }.to change{ session.state }.to(:in_process)
+      end
     end
 
     describe '#generate_code' do
-      it 'returns an array' do
-        expect(session.generate_code).to be_an(Array)
-      end
-
       it 'has 4 elements by default' do
-        expect(session.generate_code.size).to eq(4)
+        expect(session.send(:generate_code).size).to eq(4)
       end
 
       it 'all elements between 1..6' do
-        expect(session.generate_code).to all(satisfy { |v| (1..6).cover? v })
+        expect(session.send(:generate_code)).to all(satisfy { |v| (1..6).cover? v })
       end
     end
 
@@ -48,8 +48,8 @@ describe Codebreaker::Game do
           let(:code) { [6,6,6,6] }
 
           context 'which is wrong' do
-            it 'loses the game ;(' do
-              # WHERE IS CODE? OMG!!111
+            xit 'loses the game' do
+
             end
           end
         end
@@ -86,7 +86,9 @@ describe Codebreaker::Game do
           context 'and guess 1324' do
             let(:code) { [1,3,2,4] }
 
-            it 'wins a game' # idea
+            xit 'wins a game' do
+
+            end
           end
         end
       end
@@ -124,20 +126,32 @@ describe Codebreaker::Game do
       end
 
       context 'when reveals last element' do
-        it 'wins a game'
+        it 'wins a game' # still to idea
       end
     end
 
     describe '#win' do
+      before { session.start }
 
+      it 'changes state to :won' do
+        expect{ session.win }.to change{ session.state }.to(:won)
+      end
+
+      it 'changes score' do
+        expect{ session.win }.to change{ session.score }
+      end
     end
 
     describe '#lose' do
+      before { session.start }
 
-    end
+      it 'changes state to :lost' do
+        expect{ session.lose }.to change{ session.state }.to(:lost)
+      end
 
-    describe '#save_score' do
-
+      it 'changes score' do
+        expect{ session.win }.to change{ session.score }
+      end
     end
   end
 end

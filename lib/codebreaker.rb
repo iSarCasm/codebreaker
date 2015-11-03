@@ -1,43 +1,55 @@
 require "codebreaker/version"
 
 module Codebreaker
+  class ConsoleInterface
+    
+  end
+
   class Game
-    attr_accessor :attempts, :answer, :hints
-    def initialize
-      # Nothing here..
+    attr_accessor( :max_attempts, :player_name,
+                   :state, :score, :attempts, :answer,
+                   :hints, :player_name )
+    def initialize(attempts = 10)
+      @max_attempts = attempts
+      @state = :initialized
     end
 
     def start
-      @attempts = 10
+      @attempts = @max_attempts
       @answer = generate_code(4)
       @hints = 0
       @elements_revealed = []
+      @state = :in_process
     end
 
     def guess(code)
       fail IndexError if code.length != @answer.length
 
-      return win if code == @answer
-      @attempts -= 1
-      respond = []
-      code.each.with_index do |c, i|
-        if c == @answer[i]
-          respond << '+'
-        elsif @answer.include? c
-          respond << '-'
+      if code == @answer
+        win
+      else
+        @attempts -= 1
+        lose if @attempts.zero?
+        respond = []
+        code.each.with_index do |c, i|
+          if c == @answer[i]
+            respond << '+'
+          elsif @answer.include? c
+            respond << '-'
+          end
         end
+        respond.sort
       end
-      respond.sort
     end
 
     def win
       @score = (10 - @attempts) * 4 * 6 - @hints*20
-      "You won! The code was #{@answer}.\nIt took you #{10 - @attempts} attempts.\nYou'r score is #{@score}.\nWrite you'r name:"
-      save_score(gets.chomp)
+      @state = :won
     end
 
     def lose
-      "You lost :(\nTry again later."
+      @score = 0
+      @state = :lost
     end
 
     def hint
@@ -53,16 +65,11 @@ module Codebreaker
       hint
     end
 
-    def save_score(name)
-      datebase = File.new('scores','r') do |file|
-        file.puts "#{name} #{@score}"
+    private
+      def generate_code(length = 4)
+        length.times.with_object([]) do |n, code|
+          code << (1..6).to_a.sample
+        end
       end
-    end
-
-    def generate_code(length = 4)
-      length.times.with_object([]) do |n, code|
-        code << (1..6).to_a.sample
-      end
-    end
   end
 end
