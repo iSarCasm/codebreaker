@@ -2,7 +2,42 @@ require "codebreaker/version"
 
 module Codebreaker
   class ConsoleInterface
-    
+    def initialize
+      puts "Welcome, my friend to the trule advanced CodeBreaker by SarCasm!"
+      puts "
+ _______  _______  ______   _______  _______  ______    _______  _______  ___   _  _______  ______
+|       ||       ||      | |       ||  _    ||    _ |  |       ||   _   ||   | | ||       ||    _ |
+|       ||   _   ||  _    ||    ___|| |_|   ||   | ||  |    ___||  |_|  ||   |_| ||    ___||   | ||
+|       ||  | |  || | |   ||   |___ |       ||   |_||_ |   |___ |       ||      _||   |___ |   |_||_
+|      _||  |_|  || |_|   ||    ___||  _   | |    __  ||    ___||       ||     |_ |    ___||    __  |
+|     |_ |       ||       ||   |___ | |_|   ||   |  | ||   |___ |   _   ||    _  ||   |___ |   |  | |
+|_______||_______||______| |_______||_______||___|  |_||_______||__| |__||___| |_||_______||___|  |_|
+      "
+      session  = Game.new
+      puts "\nThe game starts right now!"
+      session.start
+      puts "
+      Symbol range: 1-6
+      Symbols:      4
+      Attempts:     10"
+      loop do
+        print "Your guess: "
+        guess = gets.chomp
+        if guess == 'hint'
+          puts session.hint
+        else
+          puts session.guess guess.split('').map {|x| x.to_i }
+        end
+        break if session.state != :in_process
+      end
+      if session.state == :won
+        puts "You won!"
+        puts "It took you #{session.max_attempts - session.attempts} guesses"
+        puts "Your score is: #{session.score}"
+      elsif session.state == :lost
+        puts "You lost, noob :("
+      end
+    end
   end
 
   class Game

@@ -45,11 +45,12 @@ describe Codebreaker::Game do
         end
 
         context 'last attempt' do
-          let(:code) { [6,6,6,6] }
-
+        before { session.attempts = 1 }
           context 'which is wrong' do
-            xit 'loses the game' do
+            let(:code) { [6,6,6,6] }
 
+            it 'loses the game' do
+              expect{session.guess(code)}.to change{session.state}.from(:in_process).to(:lost)
             end
           end
         end
@@ -86,8 +87,8 @@ describe Codebreaker::Game do
           context 'and guess 1324' do
             let(:code) { [1,3,2,4] }
 
-            xit 'wins a game' do
-
+            it 'wins a game' do
+              expect{session.guess(code)}.to change{session.state}.from(:in_process).to(:won)
             end
           end
         end
@@ -123,10 +124,6 @@ describe Codebreaker::Game do
 
       it 'increments number of hints' do
         expect{session.hint}.to change{session.hints}.by(1)
-      end
-
-      context 'when reveals last element' do
-        it 'wins a game' # still to idea
       end
     end
 
