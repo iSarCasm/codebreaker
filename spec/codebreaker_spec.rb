@@ -19,18 +19,22 @@ describe Codebreaker::Game do
         expect{ session.start }.to change{ session.answer }
       end
 
-      it 'changes state to :in_process' do
-        expect{ session.start }.to change{ session.state }.to(:in_process)
+      it 'changes state to :playing' do
+        expect{ session.start }.to change{ session.state }.to(:playing)
       end
     end
 
     describe '#generate_code' do
+      before do
+        session.start
+      end
+
       it 'has 4 elements by default' do
         expect(session.send(:generate_code).size).to eq(4)
       end
 
       it 'all elements between 1..6' do
-        expect(session.send(:generate_code)).to all(satisfy { |v| (1..6).cover? v })
+        expect(session.send(:generate_code)).to all(satisfy { |v| ('1'..'6').cover? v })
       end
     end
 
@@ -50,7 +54,7 @@ describe Codebreaker::Game do
             let(:code) { [6,6,6,6] }
 
             it 'loses the game' do
-              expect{session.guess(code)}.to change{session.state}.from(:in_process).to(:lost)
+              expect{session.guess(code)}.to change{session.state}.from(:playing).to(:lost)
             end
           end
         end
@@ -88,7 +92,7 @@ describe Codebreaker::Game do
             let(:code) { [1,3,2,4] }
 
             it 'wins a game' do
-              expect{session.guess(code)}.to change{session.state}.from(:in_process).to(:won)
+              expect{session.guess(code)}.to change{session.state}.from(:playing).to(:won)
             end
           end
         end
@@ -109,6 +113,7 @@ describe Codebreaker::Game do
     describe '#hint' do
       before do
         session.start
+        session.hints_left = 10
       end
       let(:unique_hints) { [session.hint, session.hint, session.hint, session.hint] }
 
@@ -123,7 +128,7 @@ describe Codebreaker::Game do
       end
 
       it 'increments number of hints' do
-        expect{session.hint}.to change{session.hints}.by(1)
+        expect{session.hint}.to change{session.hints_left}.by(-1)
       end
     end
 
