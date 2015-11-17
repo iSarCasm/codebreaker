@@ -13,7 +13,7 @@ _______  _______  ______   _______  _______  ______    _______  _______  ___   _
 |     |_ |       ||       ||   |___ | |_|   ||   |  | ||   |___ |   _   ||    _  ||   |___ |   |  | |
 |_______||_______||______| |_______||_______||___|  |_||_______||__| |__||___| |_||_______||___|  |_|
     '
-    Game_start_text   = '\nThe game starts right now!'
+    Game_start_text   = "\nThe game starts right now!"
     Diff_select_text  = 'Select difficulty'
     Same_diff_tex     = '[Enter] to play same difficulty'
     IndexErorr_text   = 'Wrong number of arguments'

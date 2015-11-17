@@ -37,9 +37,10 @@ module Codebreaker
 
       if code == @secret
         win
+      else
+        @attempts -= 1
+        lose if @attempts.zero?
       end
-      @attempts -= 1
-      lose if @attempts.zero?
       secret = @secret.dup
       [extract_exact_matches(secret, code), extract_close_matches(secret, code)]
     end
