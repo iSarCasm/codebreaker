@@ -12,23 +12,30 @@ module Codebreaker
 |_______||_______||______| |_______||_______||___|  |_||_______||__| |__||___| |_||_______||___|  |_|
       "
       session  = Game.new
-      puts "Select difficulty #{Game::GAME_SETTINGS}"
+      puts "Select difficulty #{Game::GAME_SETTINGS.keys.inspect.delete(':')}"
       diff = gets.chomp
       puts "\nThe game starts right now!"
-      session.start
+      session.start diff.to_sym
 	    loop do
 	      puts "
 	      Symbol range: #{session.symbols_range}
 	      Symbols:      #{session.symbols_count}
 	      Attempts:     #{session.attempts}
-	      Hints: 				#{session.hints_left}"
+	      Hints:        #{session.hints_left}"
 	      loop do
 	        print "Your guess: "
 	        guess = gets.chomp
 	        if guess == 'hint'
-	          puts session.hint
+	          p session.hint.map {|x| x.is_a?(Fixnum) ? x.to_s(16) : '*'}
 	        else
-	          puts session.guess guess.split('').map {|x| x.to_i }
+            begin
+              code = guess.split('').map {|x| x.to_i(16) }
+              response = session.guess code
+  	          puts '+' * response[0] + '-' * response[1]
+            rescue IndexError
+              puts 'Wrong number of arguments'
+              next
+            end
 	        end
 	        break unless session.state == :playing
 	      end
@@ -38,11 +45,12 @@ module Codebreaker
 	        puts "Your score is: #{session.score}"
 	      elsif session.state == :lost
 	        puts "You lost, noob :("
+          puts "The answer was #{session.secret}"
 	      end
 	      puts 'Wanna replay? (y/n)'
 	      answer = gets.chomp
 	      if answer == 'y'
-	      	sesion.restart
+	      	session.restart
 	      	next
 	      else
 	      	break
