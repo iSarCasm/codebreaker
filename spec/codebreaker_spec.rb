@@ -103,6 +103,30 @@ describe Codebreaker::Game do
       end
     end
 
+    describe '#lost?' do
+      it 'returns true when @state=:lost' do
+        session.instance_variable_set(:@state, :lost)
+        expect(session).to be_lost
+      end
+
+      it 'returns false when @state!=:lost' do
+        session.instance_variable_set(:@state, :playing)
+        expect(session).not_to be_lost
+      end
+    end
+
+    describe '#won?' do
+      it 'returns true when @state=:won' do
+        session.instance_variable_set(:@state, :won)
+        expect(session).to be_won
+      end
+
+      it 'returns false when @state!=:won' do
+        session.instance_variable_set(:@state, :playing)
+        expect(session).not_to be_won
+      end
+    end
+
     describe '#hint' do
       before do
         session.start
