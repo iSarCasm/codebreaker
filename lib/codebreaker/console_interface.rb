@@ -19,6 +19,7 @@ _______  _______  ______   _______  _______  ______    _______  _______  ___   _
     IndexErorr_text   = 'Wrong number of arguments'
     Guesses_took_0    = 'It took you'
     Guesses_took_1    = 'guesses'
+    Ask_for_guess_text= "Your guess: "
     Score_is_text     = 'Your score is:'
     The_answer_text   = 'The answer was'
     Win_text          = 'You won!'
@@ -73,7 +74,7 @@ _______  _______  ______   _______  _______  ______    _______  _______  ___   _
 
     def guessing
       loop do
-        print "Your guess: "
+        print Ask_for_guess_text
         guess = gets.chomp
         if guess == 'hint'
           p @session.hint.map {|x| x.is_a?(Fixnum) ? x.to_s(MAX_SYM_RANGE) : '*'}
