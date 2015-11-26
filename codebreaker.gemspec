@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'codebreaker/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "codebreaker"
+  spec.name          = "sarcasm-codebreaker"
   spec.version       = Codebreaker::VERSION
   spec.authors       = ["SarCasm"]
   spec.email         = ["sarcasm008@gmail.com"]

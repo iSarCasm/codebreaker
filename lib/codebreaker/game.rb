@@ -1,7 +1,7 @@
 module Codebreaker
   class Game
-    attr_reader(:max_attempts, :state, :score, :secret,
-                  :attempts, :secret, :hints_left, :elements_revealed,
+    attr_reader(:max_attempts, :max_hints, :settings, :state, :score,
+      :secret, :attempts, :secret, :hints_left, :elements_revealed,
                   :symbols_count, :symbols_range)
 
     GAME_SETTINGS = { easy:       { attempts: 10, symbols_count: 3, symbols_range: 6,   hints: 3 },
@@ -23,7 +23,8 @@ module Codebreaker
       @symbols_count      = settings[:symbols_count]
       @symbols_range      = settings[:symbols_range]
       @secret             = generate_code
-      @hints_left         = settings[:hints]
+      @max_hints          = settings[:hints]
+      @hints_left         = @max_hints
       @elements_revealed  = []
       @state              = :playing
     end
@@ -56,7 +57,7 @@ module Codebreaker
     alias_method :lost?, :lose?
 
     def win
-      @score = (10 - @attempts) * @symbols_count * @symbols_range + @hints_left*20
+      @score = @attempts * @symbols_count * @symbols_range + @hints_left*20
       @state = :won
     end
 
